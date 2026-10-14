@@ -1,0 +1,62 @@
+// Prisma Schema for spyxbd - Location Service Provider
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum OrderStatus {
+  RECEIVED
+  PROCESSING
+  CONFIRMED
+  CANCELLED
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  RETRYING
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
+model Order {
+  id                 String             @id @default(uuid())
+  phoneNumber        String
+  consentGranted     Boolean            @default(true)
+  consentTimestamp   DateTime           @default(now())
+  latitude           Float
+  longitude          Float
+  accuracyMeters     Float
+  locationTimestamp  DateTime
+  altitude           Float?
+  heading            Float?
+  speed              Float?
+  originalPrice      Float              @default(750.0)
+  discountedPrice    Float              @default(450.0)
+  currency           String             @default("BDT")
+  status             OrderStatus        @default(RECEIVED)
+  paymentStatus      PaymentStatus      @default(PENDING)
+  notificationStatus NotificationStatus @default(PENDING)
+  notificationError  String?
+  notificationRetries Int               @default(0)
+  telegramMessageId  String?
+  customerTokenHash  String?
+  idempotencyKey     String?            @unique
+  ipAddress          String?
+  userAgent          String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([phoneNumber])
+  @@index([createdAt])
+  @@index([status])
+  @@index([notificationStatus])
+}

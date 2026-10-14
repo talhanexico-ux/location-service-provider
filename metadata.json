@@ -1,0 +1,10 @@
+{
+  "name": "spyxbd — Location Service Provider",
+  "description": "Accurate, fast, and reliable location service provider in Bangladesh. Consensual device geolocation sharing and order processing.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
